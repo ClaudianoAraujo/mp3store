@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#E8C97A"/>
+      <stop offset="100%" stop-color="#C9A24B"/>
+    </linearGradient>
+  </defs>
+
+  <!-- fundo -->
+  <rect width="512" height="512" rx="112" fill="#0B0B0C"/>
+  <rect x="6" y="6" width="500" height="500" rx="106" fill="none" stroke="#C9A24B" stroke-opacity="0.25" stroke-width="2"/>
+
+  <!-- waveform central, formando um "A" estilizado -->
+  <g fill="url(#gold)">
+    <rect x="120" y="196" width="26" height="120" rx="13"/>
+    <rect x="164" y="150" width="26" height="212" rx="13"/>
+    <rect x="208" y="106" width="26" height="300" rx="13"/>
+    <rect x="252" y="70"  width="26" height="372" rx="13"/>
+    <rect x="296" y="106" width="26" height="300" rx="13"/>
+    <rect x="340" y="150" width="26" height="212" rx="13"/>
+    <rect x="384" y="196" width="26" height="120" rx="13"/>
+  </g>
+</svg>
