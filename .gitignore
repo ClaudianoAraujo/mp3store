@@ -1,0 +1,20 @@
+# Variáveis de ambiente (tokens, senhas) — NUNCA suba isso pro GitHub
+.env
+
+# Banco de dados local
+db.sqlite3
+
+# Python
+__pycache__/
+*.pyc
+venv/
+env/
+
+# Django
+staticfiles/
+*.log
+
+# Editor / SO
+.vscode/
+.idea/
+.DS_Store

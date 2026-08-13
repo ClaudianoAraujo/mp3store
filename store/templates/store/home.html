@@ -1,0 +1,206 @@
+{% extends "store/base.html" %}
+{% block body %}
+
+<nav class="top">
+  <div class="inner">
+    <span class="logo">Acervo<span>Áudio</span></span>
+    <span class="badge"><span class="dot"></span> Edição limitada</span>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="amb-waveform waveform" id="ambWaveform"></div>
+  <div class="wrap" style="position: relative;">
+    <p class="eyebrow">Coleção completa · 2GB+ · MP3 320kbps</p>
+    <h1>Um acervo sonoro,<br><em>feito para durar.</em></h1>
+    <p class="lead">
+      Mais de 2GB de áudios selecionados, organizados e prontos para baixar.
+      Pagamento único, acesso vitalício, liberação imediata após a confirmação.
+    </p>
+
+    <div style="margin-top: 40px;">
+      <div class="checkout-card" style="text-align: left;">
+        <h3>Comprar acesso</h3>
+        <p class="sub">R$ {{ price }} — pagamento único</p>
+
+        {% if error %}
+          <div class="error-msg">{{ error }}</div>
+        {% endif %}
+
+        <form method="post" action="{% url 'create_checkout' %}">
+          {% csrf_token %}
+          <label for="email">E-mail para receber o link</label>
+          <input type="email" id="email" name="email" placeholder="voce@email.com" required>
+          <button type="submit" class="btn-gold">Pagar com Mercado Pago</button>
+        </form>
+      </div>
+      <p class="secure-note">🔒 pagamento processado via Mercado Pago</p>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap" style="max-width: 960px;">
+    <h2>O que está incluso</h2>
+    <div class="grid3">
+      <div class="card">
+        <div class="icon">∞</div>
+        <h3>Acesso vitalício</h3>
+        <p>Baixe quantas vezes quiser, sem prazo de expiração.</p>
+      </div>
+      <div class="card">
+        <div class="icon">🔒</div>
+        <h3>Link seguro</h3>
+        <p>Liberado automaticamente após a confirmação do pagamento.</p>
+      </div>
+      <div class="card">
+        <div class="icon">⬇</div>
+        <h3>2GB+ em MP3</h3>
+        <p>Arquivos em 320kbps, organizados por pasta e categoria.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap" style="max-width: 640px; text-align: center;">
+    <h2>Ouça uma prévia</h2>
+    <p style="color: var(--muted); margin: -28px 0 40px; font-size: 14px;">
+      Uma amostra do padrão de qualidade do acervo completo.
+    </p>
+
+    {% if preview_url %}
+      <div class="player-card">
+        <button id="playBtn" class="play-btn" aria-label="Tocar prévia" type="button">
+          <span id="playIcon">▶</span>
+        </button>
+        <div class="waveform" id="previewWaveform"></div>
+        <span class="font-mono" id="playerTime" style="font-size: 12px; color: var(--muted);">0:00</span>
+      </div>
+      <audio id="previewAudio" src="{{ preview_url }}" preload="none"></audio>
+    {% else %}
+      <p style="color: var(--muted-2); font-size: 13px;">Prévia indisponível no momento.</p>
+    {% endif %}
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Perguntas frequentes</h2>
+    <div class="faq">
+      <details>
+        <summary>Como recebo os arquivos após o pagamento? <span>+</span></summary>
+        <p>Assim que o pagamento é confirmado pelo Mercado Pago, o link de download seguro é liberado automaticamente na página de sucesso e enviado para o seu e-mail.</p>
+      </details>
+      <details>
+        <summary>O link de download expira? <span>+</span></summary>
+        <p>O link temporário expira por segurança, mas você tem acesso vitalício — é só voltar à página do pedido para gerar um novo.</p>
+      </details>
+      <details>
+        <summary>Em que formato estão os áudios? <span>+</span></summary>
+        <p>Todos os arquivos estão em MP3 320kbps, organizados em pastas por categoria, totalizando mais de 2GB de conteúdo.</p>
+      </details>
+      <details>
+        <summary>O pagamento é seguro? <span>+</span></summary>
+        <p>Sim. Todo o processamento é feito pelo Mercado Pago, com criptografia de ponta a ponta. Nenhum dado de cartão passa por este site.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section style="text-align: center;">
+  <div class="wrap">
+    <h2 style="margin-bottom: 28px;">Seu acervo espera.</h2>
+    <a href="#email" class="btn-gold" onclick="document.getElementById('email').focus()">Comprar acesso — R$ {{ price }}</a>
+  </div>
+</section>
+
+<footer class="site">© AcervoÁudio — pagamento seguro via Mercado Pago</footer>
+
+<div class="sticky-bar" id="stickyBar">
+  <div class="inner">
+    <span style="font-size: 14px;">Acervo completo · 2GB+ MP3 320kbps</span>
+    <span class="price">R$ {{ price }}</span>
+    <a href="#email" class="btn-gold" onclick="document.getElementById('email').focus()">Comprar agora</a>
+  </div>
+</div>
+
+<script>
+  // Waveform ambiente (decorativo)
+  const wf = document.getElementById('ambWaveform');
+  for (let i = 0; i < 80; i++) {
+    const bar = document.createElement('span');
+    const h = 20 + Math.random() * 80;
+    bar.style.height = h + '%';
+    bar.style.animationDelay = (i % 8) * 0.08 + 's';
+    bar.style.animationDuration = (1.4 + (i % 5) * 0.15) + 's';
+    wf.appendChild(bar);
+  }
+
+  // Sticky bar ao rolar
+  const bar = document.getElementById('stickyBar');
+  window.addEventListener('scroll', () => {
+    bar.classList.toggle('show', window.scrollY > 640);
+  });
+
+  // Player da prévia
+  const previewWf = document.getElementById('previewWaveform');
+  if (previewWf) {
+    for (let i = 0; i < 44; i++) {
+      const bar = document.createElement('span');
+      const h = 20 + Math.random() * 80;
+      bar.style.height = h + '%';
+      bar.style.animationDelay = (i % 8) * 0.08 + 's';
+      bar.style.animationDuration = (1.4 + (i % 5) * 0.15) + 's';
+      bar.style.animationPlayState = 'paused';
+      previewWf.appendChild(bar);
+    }
+
+    const audio = document.getElementById('previewAudio');
+    const playBtn = document.getElementById('playBtn');
+    const playIcon = document.getElementById('playIcon');
+    const timeLabel = document.getElementById('playerTime');
+
+    function formatTime(s) {
+      if (!isFinite(s)) return '0:00';
+      const m = Math.floor(s / 60);
+      const sec = Math.floor(s % 60).toString().padStart(2, '0');
+      return `${m}:${sec}`;
+    }
+
+    function setBarsPlaying(playing) {
+      previewWf.querySelectorAll('span').forEach((bar) => {
+        bar.style.animationPlayState = playing ? 'running' : 'paused';
+      });
+    }
+
+    playBtn.addEventListener('click', () => {
+      if (audio.paused) {
+        audio.play();
+      } else {
+        audio.pause();
+      }
+    });
+
+    audio.addEventListener('play', () => {
+      playIcon.textContent = '❚❚';
+      setBarsPlaying(true);
+    });
+
+    audio.addEventListener('pause', () => {
+      playIcon.textContent = '▶';
+      setBarsPlaying(false);
+    });
+
+    audio.addEventListener('ended', () => {
+      playIcon.textContent = '▶';
+      setBarsPlaying(false);
+      timeLabel.textContent = formatTime(audio.duration);
+    });
+
+    audio.addEventListener('timeupdate', () => {
+      timeLabel.textContent = formatTime(audio.currentTime);
+    });
+  }
+</script>
+{% endblock %}

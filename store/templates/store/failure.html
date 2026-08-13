@@ -1,0 +1,11 @@
+{% extends "store/base.html" %}
+{% block body %}
+<div class="status-page">
+  <div class="status-card failed">
+    <div class="badge-icon">✕</div>
+    <h1>Pagamento não concluído</h1>
+    <p>Algo deu errado ou o pagamento foi cancelado. Você pode tentar novamente a qualquer momento.</p>
+    <a href="{% url 'home' %}" class="btn-gold">Voltar e tentar de novo</a>
+  </div>
+</div>
+{% endblock %}

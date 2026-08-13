@@ -1,0 +1,10 @@
+{% extends "store/base.html" %}
+{% block body %}
+<div class="status-page">
+  <div class="status-card pending">
+    <div class="badge-icon">⏳</div>
+    <h1>Pagamento em análise</h1>
+    <p>Assim que o Mercado Pago confirmar, o link de download será liberado e enviado para {{ order.email }}.</p>
+  </div>
+</div>
+{% endblock %}

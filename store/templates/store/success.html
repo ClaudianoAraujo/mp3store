@@ -1,0 +1,15 @@
+{% extends "store/base.html" %}
+{% block body %}
+<div class="status-page">
+  <div class="status-card paid">
+    <div class="badge-icon">✓</div>
+    <h1>Pagamento confirmado</h1>
+    {% if download_url %}
+      <p>Seu link foi liberado e também enviado para {{ order.email }}.</p>
+      <a href="{{ download_url }}" class="btn-gold">⬇ Baixar acervo</a>
+    {% else %}
+      <p>Estamos confirmando seu pagamento. Isso pode levar alguns instantes — atualize esta página em breve.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
