@@ -11,10 +11,10 @@
 <header class="hero">
   <div class="amb-waveform waveform" id="ambWaveform"></div>
   <div class="wrap" style="position: relative;">
-    <p class="eyebrow">Coleção completa · 2GB+ · MP3 320kbps</p>
+    <p class="eyebrow">Coleção completa · 3GB+ · MP3 320kbps</p>
     <h1>Um acervo sonoro,<br><em>feito para durar.</em></h1>
     <p class="lead">
-      Mais de 2GB de áudios selecionados, organizados e prontos para baixar.
+      Mais de 3GB de áudios selecionados, organizados e prontos para baixar.
       Pagamento único, acesso vitalício, liberação imediata após a confirmação.
     </p>
 
@@ -30,8 +30,8 @@
         <form method="post" action="{% url 'create_checkout' %}">
           {% csrf_token %}
           <label for="email">E-mail para receber o link</label>
-          <input type="email" id="email" name="email" placeholder="voce@email.com" required>
-          <button type="submit" class="btn-gold">Pagar com Mercado Pago</button>
+          <input type="email" id="email" name="email" placeholder="seu e-mail: tevys@email.com" required>
+          <button type="submit" class="btn-gold">Comprar Agora</button>
         </form>
       </div>
       <p class="secure-note">🔒 pagamento processado via Mercado Pago</p>
@@ -55,7 +55,7 @@
       </div>
       <div class="card">
         <div class="icon">⬇</div>
-        <h3>2GB+ em MP3</h3>
+        <h3>3GB+ em MP3</h3>
         <p>Arquivos em 320kbps, organizados por pasta e categoria.</p>
       </div>
     </div>
@@ -119,7 +119,7 @@
 
 <div class="sticky-bar" id="stickyBar">
   <div class="inner">
-    <span style="font-size: 14px;">Acervo completo · 2GB+ MP3 320kbps</span>
+    <span style="font-size: 14px;">Acervo completo · 3GB+ MP3 320kbps</span>
     <span class="price">R$ {{ price }}</span>
     <a href="#email" class="btn-gold" onclick="document.getElementById('email').focus()">Comprar agora</a>
   </div>
