@@ -1,7 +1,6 @@
 import logging
 
 from django.conf import settings
-from django.core.mail import send_mail
 from django.core.signing import BadSignature, SignatureExpired, TimestampSigner
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect, render
@@ -10,7 +9,7 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET, require_POST
 
-from . import services, storage
+from . import email_utils, services, storage
 from .models import Order
 
 logger = logging.getLogger(__name__)
@@ -135,17 +134,15 @@ def send_download_email(order):
     download_url = f"{settings.SITE_URL}{reverse('download', args=[token])}"
 
     try:
-        send_mail(
+        email_utils.send_download_email_message(
+            to_email=order.email,
             subject="Seu acesso ao Pack de Áudios Premium",
-            message=(
+            body=(
                 f"Pagamento confirmado!\n\n"
                 f"Baixe seu acervo neste link (válido por "
                 f"{settings.DOWNLOAD_LINK_MAX_AGE // 3600}h):\n{download_url}\n\n"
                 f"Se o link expirar, volte à página do seu pedido para gerar um novo."
             ),
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[order.email],
-            fail_silently=False,
         )
     except Exception:
         # Não deixamos o webhook falhar por causa do e-mail — o pedido já

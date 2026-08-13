@@ -174,6 +174,16 @@ EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
 DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", EMAIL_HOST_USER)
 
+# Sem isso, uma conexão SMTP que trava (comum em alguns provedores de
+# hospedagem, que bloqueiam ou atrasam a porta do Gmail) pode travar o
+# processo inteiro do site até o servidor matar o worker à força.
+EMAIL_TIMEOUT = int(os.environ.get("EMAIL_TIMEOUT", "10"))
+
+# Se configurado, o envio passa a usar a API do Resend (HTTPS) em vez de
+# SMTP — evita bloqueios de porta comuns em hospedagens como a Railway.
+# Crie a conta em https://resend.com e gere uma API key.
+RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "")
+
 # Se as credenciais de e-mail não estiverem configuradas, os e-mails são
 # apenas impressos no terminal em vez de enviados de verdade — assim o site
 # não quebra enquanto você não configura o EMAIL_HOST_USER/PASSWORD.
