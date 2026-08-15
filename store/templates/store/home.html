@@ -11,10 +11,10 @@
 <header class="hero">
   <div class="amb-waveform waveform" id="ambWaveform"></div>
   <div class="wrap" style="position: relative;">
-    <p class="eyebrow">Coleção completa · 3GB+ · MP3 320kbps</p>
+    <p class="eyebrow">Coleção completa · 2GB+ · MP3 320kbps</p>
     <h1>Um acervo sonoro,<br><em>feito para durar.</em></h1>
     <p class="lead">
-      Mais de 3GB de áudios selecionados, organizados e prontos para baixar.
+      Mais de 2GB de áudios selecionados, organizados e prontos para baixar.
       Pagamento único, acesso vitalício, liberação imediata após a confirmação.
     </p>
 
@@ -30,8 +30,8 @@
         <form method="post" action="{% url 'create_checkout' %}">
           {% csrf_token %}
           <label for="email">E-mail para receber o link</label>
-          <input type="email" id="email" name="email" placeholder="seu e-mail: tevys@email.com" required>
-          <button type="submit" class="btn-gold">Comprar Agora</button>
+          <input type="email" id="email" name="email" placeholder="voce@email.com" required>
+          <button type="submit" class="btn-gold">Pagar com Mercado Pago</button>
         </form>
       </div>
       <p class="secure-note">🔒 pagamento processado via Mercado Pago</p>
@@ -55,7 +55,7 @@
       </div>
       <div class="card">
         <div class="icon">⬇</div>
-        <h3>3GB+ em MP3</h3>
+        <h3>2GB+ em MP3</h3>
         <p>Arquivos em 320kbps, organizados por pasta e categoria.</p>
       </div>
     </div>
@@ -69,15 +69,26 @@
       Uma amostra do padrão de qualidade do acervo completo.
     </p>
 
-    {% if preview_url %}
-      <div class="player-card">
-        <button id="playBtn" class="play-btn" aria-label="Tocar prévia" type="button">
-          <span id="playIcon">▶</span>
+    {% if preview_tracks %}
+      <div class="big-player">
+        <button id="bigPlayBtn" class="big-play-btn" type="button" aria-label="Tocar/pausar">
+          <span id="bigPlayIcon">▶</span>
         </button>
-        <div class="waveform" id="previewWaveform"></div>
-        <span class="font-mono" id="playerTime" style="font-size: 12px; color: var(--muted);">0:00</span>
+        <div class="now-playing" id="nowPlaying">—</div>
+        <div class="now-playing-sub font-mono" id="nowPlayingTime">0:00 / 0:00</div>
+        <div class="waveform" id="bigWaveform" style="justify-content: center; height: 40px; margin-bottom: 20px;"></div>
+
+        <div class="tracklist">
+          {% for track in preview_tracks %}
+            <div class="tl-item" data-index="{{ forloop.counter0 }}">
+              <span class="tl-num font-mono">{{ forloop.counter|stringformat:"02d" }}</span>
+              <span class="tl-title">{{ track.title }}</span>
+            </div>
+          {% endfor %}
+        </div>
       </div>
-      <audio id="previewAudio" src="{{ preview_url }}" preload="none"></audio>
+      <audio id="previewAudio" preload="none"></audio>
+      {{ preview_tracks|json_script:"tracks-data" }}
     {% else %}
       <p style="color: var(--muted-2); font-size: 13px;">Prévia indisponível no momento.</p>
     {% endif %}
@@ -119,7 +130,7 @@
 
 <div class="sticky-bar" id="stickyBar">
   <div class="inner">
-    <span style="font-size: 14px;">Acervo completo · 3GB+ MP3 320kbps</span>
+    <span style="font-size: 14px;">Acervo completo · 2GB+ MP3 320kbps</span>
     <span class="price">R$ {{ price }}</span>
     <a href="#email" class="btn-gold" onclick="document.getElementById('email').focus()">Comprar agora</a>
   </div>
@@ -144,22 +155,28 @@
   });
 
   // Player da prévia
-  const previewWf = document.getElementById('previewWaveform');
-  if (previewWf) {
-    for (let i = 0; i < 44; i++) {
+  // Player de prévia — múltiplas faixas com lista
+  const tracksDataEl = document.getElementById('tracks-data');
+  if (tracksDataEl) {
+    const tracks = JSON.parse(tracksDataEl.textContent);
+    const bigWf = document.getElementById('bigWaveform');
+    for (let i = 0; i < 50; i++) {
       const bar = document.createElement('span');
       const h = 20 + Math.random() * 80;
       bar.style.height = h + '%';
       bar.style.animationDelay = (i % 8) * 0.08 + 's';
       bar.style.animationDuration = (1.4 + (i % 5) * 0.15) + 's';
       bar.style.animationPlayState = 'paused';
-      previewWf.appendChild(bar);
+      bigWf.appendChild(bar);
     }
 
     const audio = document.getElementById('previewAudio');
-    const playBtn = document.getElementById('playBtn');
-    const playIcon = document.getElementById('playIcon');
-    const timeLabel = document.getElementById('playerTime');
+    const playBtn = document.getElementById('bigPlayBtn');
+    const playIcon = document.getElementById('bigPlayIcon');
+    const nowPlaying = document.getElementById('nowPlaying');
+    const timeLabel = document.getElementById('nowPlayingTime');
+    const items = document.querySelectorAll('.tl-item');
+    let currentIndex = 0;
 
     function formatTime(s) {
       if (!isFinite(s)) return '0:00';
@@ -169,17 +186,30 @@
     }
 
     function setBarsPlaying(playing) {
-      previewWf.querySelectorAll('span').forEach((bar) => {
+      bigWf.querySelectorAll('span').forEach((bar) => {
         bar.style.animationPlayState = playing ? 'running' : 'paused';
       });
     }
 
+    function loadTrack(index, autoplay) {
+      currentIndex = index;
+      const track = tracks[index];
+      audio.src = track.url;
+      nowPlaying.textContent = track.title;
+      items.forEach((el) => el.classList.toggle('active', Number(el.dataset.index) === index));
+      if (autoplay) audio.play();
+    }
+
+    items.forEach((el) => {
+      el.addEventListener('click', () => loadTrack(Number(el.dataset.index), true));
+    });
+
     playBtn.addEventListener('click', () => {
-      if (audio.paused) {
-        audio.play();
-      } else {
-        audio.pause();
+      if (!audio.src) {
+        loadTrack(0, true);
+        return;
       }
+      audio.paused ? audio.play() : audio.pause();
     });
 
     audio.addEventListener('play', () => {
@@ -192,15 +222,19 @@
       setBarsPlaying(false);
     });
 
-    audio.addEventListener('ended', () => {
-      playIcon.textContent = '▶';
-      setBarsPlaying(false);
-      timeLabel.textContent = formatTime(audio.duration);
+    audio.addEventListener('timeupdate', () => {
+      timeLabel.textContent = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
     });
 
-    audio.addEventListener('timeupdate', () => {
-      timeLabel.textContent = formatTime(audio.currentTime);
+    audio.addEventListener('ended', () => {
+      const next = (currentIndex + 1) % tracks.length;
+      loadTrack(next, true);
     });
+
+    if (tracks.length) {
+      nowPlaying.textContent = tracks[0].title;
+      items[0].classList.add('active');
+    }
   }
 </script>
 {% endblock %}

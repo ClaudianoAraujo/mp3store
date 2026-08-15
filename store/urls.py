@@ -10,4 +10,6 @@ urlpatterns = [
     path("pendente/<uuid:order_id>/", views.pending, name="pending"),
     path("falha/<uuid:order_id>/", views.failure, name="failure"),
     path("download/<str:token>/", views.download, name="download"),
+    path("robots.txt", views.robots_txt, name="robots_txt"),
+    path("sitemap.xml", views.sitemap_xml, name="sitemap_xml"),
 ]

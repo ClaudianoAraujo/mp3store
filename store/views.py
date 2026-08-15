@@ -18,19 +18,17 @@ signer = TimestampSigner(salt="download-link")
 
 def home(request):
     try:
-        preview_url = storage.generate_presigned_download_url(
-            key=settings.R2_PREVIEW_KEY, expires_in=settings.R2_PREVIEW_URL_EXPIRY
-        )
+        preview_tracks = storage.list_preview_tracks()
     except Exception:
-        # Se o R2 ainda não estiver configurado ou a prévia não existir, a
-        # página continua funcionando normalmente, só sem o player.
-        logger.warning("Não foi possível gerar o link da prévia (R2)")
-        preview_url = None
+        # Se o R2 ainda não estiver configurado ou a pasta de prévias
+        # estiver vazia, a página continua funcionando, só sem o player.
+        logger.exception("Não foi possível listar as faixas de prévia (R2)")
+        preview_tracks = []
 
     return render(
         request,
         "store/home.html",
-        {"price": settings.PRODUCT_PRICE, "preview_url": preview_url},
+        {"price": settings.PRODUCT_PRICE, "preview_tracks": preview_tracks},
     )
 
 
@@ -206,3 +204,34 @@ def download(request, token):
         raise Http404("Não foi possível gerar o link de download no momento.")
 
     return redirect(file_url)
+
+
+@require_GET
+def robots_txt(request):
+    lines = [
+        "User-agent: *",
+        "Allow: /$",
+        "Disallow: /checkout/",
+        "Disallow: /webhook/",
+        "Disallow: /sucesso/",
+        "Disallow: /pendente/",
+        "Disallow: /falha/",
+        "Disallow: /download/",
+        f"Sitemap: {settings.SITE_URL}/sitemap.xml",
+    ]
+    return HttpResponse("\n".join(lines), content_type="text/plain")
+
+
+@require_GET
+def sitemap_xml(request):
+    xml = (
+        '<?xml version="1.0" encoding="UTF-8"?>'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+        "<url>"
+        f"<loc>{settings.SITE_URL}/</loc>"
+        "<changefreq>weekly</changefreq>"
+        "<priority>1.0</priority>"
+        "</url>"
+        "</urlset>"
+    )
+    return HttpResponse(xml, content_type="application/xml")
