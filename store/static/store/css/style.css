@@ -175,21 +175,32 @@ section h2 {
   margin-bottom: 18px;
 }
 
-/* Player de prévia */
-.player-card {
-  display: flex; align-items: center; gap: 20px;
-  background: var(--card); border: 1px solid var(--border); border-radius: 16px;
-  padding: 24px 28px; text-align: left;
+/* Player de prévia — múltiplas faixas */
+.big-player {
+  background: var(--card); border: 1px solid var(--border); border-radius: 18px;
+  padding: 32px; text-align: center;
 }
-.play-btn {
-  width: 52px; height: 52px; border-radius: 50%; border: none; cursor: pointer;
-  background: var(--gold); color: #0B0B0C; font-size: 15px;
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+.big-play-btn {
+  width: 60px; height: 60px; border-radius: 50%; border: none; cursor: pointer;
+  background: var(--gold); color: #0B0B0C; font-size: 16px;
+  display: flex; align-items: center; justify-content: center; margin: 0 auto 18px;
   transition: filter 200ms ease;
 }
-.play-btn:hover { filter: brightness(1.1); }
-.player-card .waveform { flex: 1; height: 44px; }
-.player-card .waveform span { animation: bar 1.6s ease-in-out infinite; }
+.big-play-btn:hover { filter: brightness(1.1); }
+.now-playing { font-size: 15px; color: var(--ivory); margin-bottom: 4px; }
+.now-playing-sub { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+.big-player .waveform span { animation: bar 1.6s ease-in-out infinite; }
+.tracklist { text-align: left; border-top: 1px solid var(--border); padding-top: 14px; margin-top: 6px; }
+.tl-item {
+  display: flex; align-items: center; justify-content: flex-start; gap: 12px;
+  padding: 10px 8px; text-align: left;
+  font-size: 14px; color: var(--muted); cursor: pointer; border-radius: 8px;
+  transition: background 150ms ease, color 150ms ease;
+}
+.tl-item:hover { background: rgba(201,162,75,0.06); }
+.tl-item.active { color: var(--gold-light); }
+.tl-num { width: 20px; flex-shrink: 0; font-size: 11px; color: var(--muted); text-align: left; }
+.tl-item.active .tl-num { color: var(--gold-light); }
 
 /* Sticky bar */
 .sticky-bar {

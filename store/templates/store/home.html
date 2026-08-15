@@ -11,10 +11,10 @@
 <header class="hero">
   <div class="amb-waveform waveform" id="ambWaveform"></div>
   <div class="wrap" style="position: relative;">
-    <p class="eyebrow">Coleção completa · 2GB+ · MP3 320kbps</p>
+    <p class="eyebrow">Coleção completa · 6GB+ · MP3 320kbps</p>
     <h1>Um acervo sonoro,<br><em>feito para durar.</em></h1>
     <p class="lead">
-      Mais de 2GB de áudios selecionados, organizados e prontos para baixar.
+      Mais de 6GB de áudios selecionados, organizados e prontos para baixar.
       Pagamento único, acesso vitalício, liberação imediata após a confirmação.
     </p>
 
@@ -31,7 +31,7 @@
           {% csrf_token %}
           <label for="email">E-mail para receber o link</label>
           <input type="email" id="email" name="email" placeholder="voce@email.com" required>
-          <button type="submit" class="btn-gold">Pagar com Mercado Pago</button>
+          <button type="submit" class="btn-gold">Comprar Agora</button>
         </form>
       </div>
       <p class="secure-note">🔒 pagamento processado via Mercado Pago</p>
@@ -55,7 +55,7 @@
       </div>
       <div class="card">
         <div class="icon">⬇</div>
-        <h3>2GB+ em MP3</h3>
+        <h3>6GB+ em MP3</h3>
         <p>Arquivos em 320kbps, organizados por pasta e categoria.</p>
       </div>
     </div>
@@ -63,7 +63,7 @@
 </section>
 
 <section class="alt">
-  <div class="wrap" style="max-width: 640px; text-align: center;">
+  <div class="wrap" style="max-width: 640px; text-align: left;">
     <h2>Ouça uma prévia</h2>
     <p style="color: var(--muted); margin: -28px 0 40px; font-size: 14px;">
       Uma amostra do padrão de qualidade do acervo completo.
@@ -130,7 +130,7 @@
 
 <div class="sticky-bar" id="stickyBar">
   <div class="inner">
-    <span style="font-size: 14px;">Acervo completo · 2GB+ MP3 320kbps</span>
+    <span style="font-size: 14px;">Acervo completo · 6GB+ MP3 320kbps</span>
     <span class="price">R$ {{ price }}</span>
     <a href="#email" class="btn-gold" onclick="document.getElementById('email').focus()">Comprar agora</a>
   </div>
