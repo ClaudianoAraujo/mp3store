@@ -241,3 +241,17 @@ footer.site {
   padding: 32px 24px; text-align: center; border-top: 1px solid #1E1C21;
   font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted-2);
 }
+
+/* Botão flutuante de suporte (WhatsApp) */
+.whatsapp-btn {
+  position: fixed; bottom: 24px; right: 24px; z-index: 50;
+  width: 54px; height: 54px; border-radius: 50%;
+  background: #25D366; color: #0B0B0C;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.4);
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+.whatsapp-btn:hover { transform: scale(1.06); box-shadow: 0 6px 22px rgba(0,0,0,0.5); }
+@media (max-width: 640px) {
+  .whatsapp-btn { bottom: 84px; } /* fica acima da sticky-bar no mobile */
+}
